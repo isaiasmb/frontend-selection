@@ -3,22 +3,28 @@ import PropTypes from 'prop-types'
 import * as utils from './utils'
 import * as S from './styled'
 
-const TextSelection = ({ text, tokenSelected, onChange }) => {
+const TextSelection = ({ text, tokenSelecteds, onChange }) => {
   const [tokens, setTokens] = useState(null)
   const [startToken, setStartToken] = useState(null)
   const [endToken, setEndToken] = useState(null)
   const [browserSelection, setBrowserSelection] = useState(null)
 
   useEffect(() => {
+    let browserSelection = null
+    if (document && document.getSelection) {
+      browserSelection = document.getSelection()
+    }
+    setBrowserSelection(browserSelection)
     const tokens = utils.getTokens(text)
     setTokens(tokens)
   }, [text])
 
   useEffect(() => {
     if (onChange && startToken !== null) {
-      onChange(startToken)
+      const newTokenSelecteds = utils.getTokenSelecteds(startToken, endToken, tokens, tokenSelecteds)
+      onChange(newTokenSelecteds)
     }
-    
+
     if (browserSelection) {
       browserSelection.removeAllRanges()
     }
@@ -40,11 +46,6 @@ const TextSelection = ({ text, tokenSelected, onChange }) => {
               if (utils.isCommaOrDot(token)) {
                 return
               }
-              let browserSelection = null
-              if (document && document.getSelection) {
-                browserSelection = document.getSelection()
-              }
-              setBrowserSelection(browserSelection)
               setEndToken(index)
             }}
             key={index}>
@@ -53,7 +54,7 @@ const TextSelection = ({ text, tokenSelected, onChange }) => {
               <> </>
             }
             <S.Token
-              selected={index === tokenSelected}>
+              selected={tokenSelecteds.includes(index)}>
               {token}
             </S.Token>
           </S.TokenWrapper>
@@ -63,9 +64,13 @@ const TextSelection = ({ text, tokenSelected, onChange }) => {
   )
 }
 
+TextSelection.defaultProps = {
+  tokenSelecteds: []
+}
+
 TextSelection.propTypes = {
   text: PropTypes.string.isRequired,
-  tokenSelected: PropTypes.number,
+  tokenSelecteds: PropTypes.arrayOf(PropTypes.number),
   onChange: PropTypes.func
 }
 

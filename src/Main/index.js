@@ -9,7 +9,6 @@ const App = () => {
   useEffect(() => {
     async function fetchData () {
       const resp = await api.getTokens()
-      console.log(resp)
       if (resp && resp.data && resp.data.length) {
         setText(resp.data[0])
       }
@@ -22,18 +21,18 @@ const App = () => {
       <S.MainTitle>
         Bandyer Frontend selection home assignment
         <S.MainSubtitle>
-          Task 1
+          Task 2
         </S.MainSubtitle>
       </S.MainTitle>
       <S.MainDescription>
-        The user must be able to select a substring of the text document and persist the selection to the server.
+        The user must be able to select multiple selected tokens of the text document and persist the selections to the server. A token can be deselected.
       </S.MainDescription>
       <S.Main>
         <TextSelection
           text={text ? text.text : ''}
-          tokenSelected={text ? text.tokenSelected : null}
-          onChange={async tokenSelected => {
-            const resp = await api.changeTokenSelected(text._id, tokenSelected)
+          tokenSelecteds={text ? text.tokenSelecteds : []}
+          onChange={async tokenSelecteds => {
+            const resp = await api.changeTokenSelected(text._id, tokenSelecteds)
             if (resp && resp.data) {
               setText(resp.data)
             }

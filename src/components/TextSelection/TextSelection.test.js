@@ -17,36 +17,36 @@ describe('TextSelection', () => {
 
   it('should have the correct number of tokens when mount', () => {
     const wrapper = mount(<TextSelection text={text} />)
-    expect(wrapper.find(S.TokenWrapper)).to.have.length(16)
+    expect(wrapper.find(S.TokenWrapper)).to.have.length([16])
   })
 
-  it('should select a token when tokenSelected was passed', () => {
-    const wrapper = mount(<TextSelection text={text} tokenSelected={5} />)
+  it('should select a token when tokenSelecteds was passed', () => {
+    const wrapper = mount(<TextSelection text={text} tokenSelecteds={[5]} />)
     expect(wrapper.find(S.Token).get(5).props.selected).to.be.true
   })
 
-  it('should select only single token when tokenSelected was passed', () => {
-    const wrapper = mount(<TextSelection text={text} tokenSelected={5} />)
+  it('should select only single token when tokenSelecteds was passed', () => {
+    const wrapper = mount(<TextSelection text={text} tokenSelecteds={[5]} />)
     const selections = wrapper.find(S.Token).filterWhere(token => token.props().selected)
     expect(selections).to.have.lengthOf(1)
   })
 
-  it('should select a single token when select any text', () => {
+  it('should select a multiple token when select any text', () => {
     const handleChange = token => {
-      expect(token).to.be.equal(3)
+      expect(token).to.be.deep.equal([3, 5, 6])
     }
-    const wrapper = mount(<TextSelection text={text} tokenSelected={5} onChange={handleChange} />)
+    const wrapper = mount(<TextSelection text={text} tokenSelecteds={[5]} onChange={handleChange} />)
 
     expect(wrapper.find(S.Token).get(5).props.selected).to.be.true
     wrapper.find(S.TokenWrapper).at(3).simulate('mouseDown')
     wrapper.find(S.TokenWrapper).at(6).simulate('mouseUp')
   })
 
-  it('should select a single token different from comma or dot when select any text', () => {
+  it('should select a multiple token different from comma or dot when select any text', () => {
     const handleChange = token => {
-      expect(token).to.be.equal(5)
+      expect(token).to.be.deep.equal([3, 5, 6])
     }
-    const wrapper = mount(<TextSelection text={text} tokenSelected={5} onChange={handleChange} />)
+    const wrapper = mount(<TextSelection text={text} tokenSelecteds={[5]} onChange={handleChange} />)
 
     expect(wrapper.find(S.Token).get(5).props.selected).to.be.true
     wrapper.find(S.TokenWrapper).at(4).simulate('mouseDown')

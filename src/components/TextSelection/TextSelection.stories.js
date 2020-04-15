@@ -18,23 +18,23 @@ Apollo 13 has been dramatized, most notably in the 1995 film Apollo 13.`
 
 
 const store = new Store({
-  tokenSelected: 15
+  tokenSelecteds: [15, 16, 27, 28]
 })
 
 storiesOf('TextSelection', module)
   .add('with text', () => (
     <TextSelection text={text} />
   ))
-  .add('with text, tokenSelected', () => (
-    <TextSelection text={text} tokenSelected={store.get('tokenSelected')} />
+  .add('with text, tokenSelecteds', () => (
+    <TextSelection text={text} tokenSelecteds={store.get('tokenSelecteds')} />
   ))
-  .add('with text, tokenSelected, onChange', () => (
+  .add('with text, tokenSelecteds, onChange', () => (
     <State store={store}>
       <TextSelection
         text={text}
-        tokenSelected={store.get('tokenSelected')}
-        onChange={token => {
-          store.set({ tokenSelected: token })
+        tokenSelecteds={store.get('tokenSelecteds')}
+        onChange={tokenSelecteds => {
+          store.set({ tokenSelecteds })
         }} />
     </State>
   ))

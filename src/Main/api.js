@@ -8,9 +8,9 @@ export const getTokens = async () => {
   }
 }
 
-export const changeTokenSelected = async (textId, tokenSelected) => {
+export const changeTokenSelected = async (textId, tokenSelecteds) => {
   try {
-    return await request.patch(`/tokens/${textId}`, { tokenSelected })
+    return await request.patch(`/tokens/${textId}`, { tokenSelecteds })
   } catch (error) {
     console.error(error)
   }

@@ -26,3 +26,47 @@ export const isCommaOrDot = token => {
 
   return !!token.match(/^[,.]/)
 }
+
+export const getTokenSelecteds = (startToken, endToken, allTokens, tokenSelecteds) => {
+  const newTokenSelecteds = []
+
+  if (startToken < endToken) {
+    for (let i = startToken; i <= endToken; i++) {
+      newTokenSelecteds.push(i)
+    }
+  }
+
+  if (startToken > endToken) {
+    const start = endToken
+    const end = startToken
+    for (let i = start; i <= end; i++) {
+      newTokenSelecteds.push(i)
+    }
+  }
+
+  if (startToken === endToken) {
+    newTokenSelecteds.push(startToken)
+  }
+
+  const filteredTokens = getFilteredTokens(newTokenSelecteds, tokenSelecteds, allTokens)
+
+  return filteredTokens
+}
+
+const getFilteredTokens = (newTokenSelecteds, tokenSelecteds, allTokens) => {
+  const filteredTokens = []
+  newTokenSelecteds.forEach(selected => {
+    const token = allTokens[selected]
+    if (!isCommaOrDot(token)) {
+      filteredTokens.push(selected)
+    }
+  })
+
+  tokenSelecteds.forEach(token => {
+    if (!filteredTokens.includes(token)) {
+      filteredTokens.push(token)
+    }
+  })
+
+  return filteredTokens
+}

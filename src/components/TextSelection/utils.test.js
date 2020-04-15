@@ -88,5 +88,25 @@ describe('TextSelection utils', () => {
   
       expect(error.message).to.be.equal('The first parameter must be a string')
     })
+
+    it('getTokenSelecteds(5, 10, tokens, []) should return [5, 6, 7, 8, 9, 10]', () => {
+      const selectedTokens = utils.getTokenSelecteds(5, 10, tokens, [])
+      expect(selectedTokens).to.be.deep.equal([5, 6, 7, 8, 9, 10])
+    })
+
+    it('getTokenSelecteds(10, 5, tokens, []) should return [5, 6, 7, 8, 9, 10]', () => {
+      const selectedTokens = utils.getTokenSelecteds(10, 5, tokens, [])
+      expect(selectedTokens).to.be.deep.equal([5, 6, 7, 8, 9, 10])
+    })
+
+    it('getTokenSelecteds(10, 5, tokens, [11]) should return [5, 6, 7, 8, 9, 10, 11]', () => {
+      const selectedTokens = utils.getTokenSelecteds(10, 5, tokens, [11])
+      expect(selectedTokens).to.be.deep.equal([5, 6, 7, 8, 9, 10, 11])
+    })
+
+    it('getTokenSelecteds(5, 5, tokens, []) should return [5]', () => {
+      const selectedTokens = utils.getTokenSelecteds(5, 5, tokens, [])
+      expect(selectedTokens).to.be.deep.equal([5])
+    })
   })
 })
