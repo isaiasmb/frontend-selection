@@ -28,11 +28,19 @@ export const isCommaOrDot = token => {
 }
 
 export const getTokenSelecteds = (startToken, endToken, allTokens, tokenSelecteds) => {
-  const newTokenSelecteds = []
+  const newTokens = getNewTokens(startToken, endToken)
+
+  const filteredTokens = getFilteredTokens(startToken, newTokens, tokenSelecteds, allTokens)
+
+  return filteredTokens
+}
+
+const getNewTokens = (startToken, endToken) => {
+  const newTokens = []
 
   if (startToken < endToken) {
     for (let i = startToken; i <= endToken; i++) {
-      newTokenSelecteds.push(i)
+      newTokens.push(i)
     }
   }
 
@@ -40,22 +48,20 @@ export const getTokenSelecteds = (startToken, endToken, allTokens, tokenSelected
     const start = endToken
     const end = startToken
     for (let i = start; i <= end; i++) {
-      newTokenSelecteds.push(i)
+      newTokens.push(i)
     }
   }
 
   if (startToken === endToken) {
-    newTokenSelecteds.push(startToken)
+    newTokens.push(startToken)
   }
 
-  const filteredTokens = getFilteredTokens(newTokenSelecteds, tokenSelecteds, allTokens)
-
-  return filteredTokens
+  return newTokens
 }
 
-const getFilteredTokens = (newTokenSelecteds, tokenSelecteds, allTokens) => {
-  const filteredTokens = []
-  newTokenSelecteds.forEach(selected => {
+const getFilteredTokens = (startToken, newTokens, tokenSelecteds, allTokens) => {
+  let filteredTokens = []
+  newTokens.forEach(selected => {
     const token = allTokens[selected]
     if (!isCommaOrDot(token)) {
       filteredTokens.push(selected)
@@ -67,6 +73,12 @@ const getFilteredTokens = (newTokenSelecteds, tokenSelecteds, allTokens) => {
       filteredTokens.push(token)
     }
   })
+
+  if (tokenSelecteds.includes(startToken)) {
+    newTokens.forEach(token => {
+      filteredTokens = filteredTokens.filter(filteredToken => filteredToken !== token)
+    })
+  }
 
   return filteredTokens
 }

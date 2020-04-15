@@ -6,7 +6,6 @@ import * as S from './styled'
 const TextSelection = ({ text, tokenSelecteds, onChange }) => {
   const [tokens, setTokens] = useState(null)
   const [startToken, setStartToken] = useState(null)
-  const [endToken, setEndToken] = useState(null)
   const [browserSelection, setBrowserSelection] = useState(null)
 
   useEffect(() => {
@@ -18,17 +17,6 @@ const TextSelection = ({ text, tokenSelecteds, onChange }) => {
     const tokens = utils.getTokens(text)
     setTokens(tokens)
   }, [text])
-
-  useEffect(() => {
-    if (onChange && startToken !== null) {
-      const newTokenSelecteds = utils.getTokenSelecteds(startToken, endToken, tokens, tokenSelecteds)
-      onChange(newTokenSelecteds)
-    }
-
-    if (browserSelection) {
-      browserSelection.removeAllRanges()
-    }
-  }, [endToken])
 
   return (
     <S.TextSelectionWrapper>
@@ -46,7 +34,14 @@ const TextSelection = ({ text, tokenSelecteds, onChange }) => {
               if (utils.isCommaOrDot(token)) {
                 return
               }
-              setEndToken(index)
+              if (onChange && startToken !== null) {
+                const newTokenSelecteds = utils.getTokenSelecteds(startToken, index, tokens, tokenSelecteds)
+                onChange(newTokenSelecteds)
+              }
+
+              if (browserSelection) {
+                browserSelection.removeAllRanges()
+              }
             }}
             key={index}>
             {

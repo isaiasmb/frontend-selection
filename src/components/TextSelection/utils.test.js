@@ -108,5 +108,10 @@ describe('TextSelection utils', () => {
       const selectedTokens = utils.getTokenSelecteds(5, 5, tokens, [])
       expect(selectedTokens).to.be.deep.equal([5])
     })
+
+    it('getTokenSelecteds(3, 7, tokens, [3, 4, 5, 6, 7, 8, 9]) should return [8, 9]', () => {
+      const selectedTokens = utils.getTokenSelecteds(3, 7, tokens, [3, 4, 5, 6, 7, 8, 9])
+      expect(selectedTokens).to.be.deep.equal([8, 9])
+    })
   })
 })
