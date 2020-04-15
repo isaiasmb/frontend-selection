@@ -15,7 +15,7 @@ const TextSelection = ({ text, tokenSelected, onChange }) => {
   }, [text])
 
   useEffect(() => {
-    if (onChange && startToken) {
+    if (onChange && startToken !== null) {
       onChange(startToken)
     }
     
