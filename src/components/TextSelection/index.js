@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import ReactTooltip from 'react-tooltip'
 import * as utils from './utils'
 import * as S from './styled'
 
@@ -22,38 +23,53 @@ const TextSelection = ({ text, tokenSelecteds, onChange }) => {
     <S.TextSelectionWrapper>
       {
         tokens &&
-        tokens.map((token, index) => (
-          <S.TokenWrapper
-            onMouseDown={() => {
-              if (utils.isCommaOrDot(token)) {
-                return
-              }
-              setStartToken(index)
-            }}
-            onMouseUp={() => {
-              if (utils.isCommaOrDot(token)) {
-                return
-              }
-              if (onChange && startToken !== null) {
-                const newTokenSelecteds = utils.getTokenSelecteds(startToken, index, tokens, tokenSelecteds)
-                onChange(newTokenSelecteds)
-              }
+        tokens.map((token, index) => {
+          const key = Math.random()
+          return (
+            <S.TokenWrapper
+              data-tip=''
+              data-for={`token-tooltip${key}`}
+              data-class='token-tooltip'
+              onMouseDown={() => {
+                if (utils.isCommaOrDot(token)) {
+                  return
+                }
+                setStartToken(index)
+              }}
+              onMouseUp={() => {
+                if (utils.isCommaOrDot(token)) {
+                  return
+                }
+                if (onChange && startToken !== null) {
+                  const newTokenSelecteds = utils.getTokenSelecteds(startToken, index, tokens, tokenSelecteds)
+                  onChange(newTokenSelecteds)
+                }
 
-              if (browserSelection) {
-                browserSelection.removeAllRanges()
+                if (browserSelection) {
+                  browserSelection.removeAllRanges()
+                }
+              }}
+              key={index}>
+              {
+                !utils.isCommaOrDot(token) &&
+                <> </>
               }
-            }}
-            key={index}>
-            {
-              !utils.isCommaOrDot(token) &&
-              <> </>
-            }
-            <S.Token
-              selected={tokenSelecteds.includes(index)}>
-              {token}
-            </S.Token>
-          </S.TokenWrapper>
-        ))
+              <S.Token
+                selected={utils.isSelected(tokenSelecteds, index)}>
+                {token}
+              </S.Token>
+              {
+                utils.isSelected(tokenSelecteds, index) &&
+                <ReactTooltip
+                  id={`token-tooltip${key}`}
+                  place='top'
+                  type='dark'
+                  effect='solid'
+                  getContent={() => <div>{utils.getTooltipValue(tokenSelecteds, index)}</div>} />
+              }
+            </S.TokenWrapper>
+          )
+        })
       }
     </S.TextSelectionWrapper>
   )
@@ -65,7 +81,7 @@ TextSelection.defaultProps = {
 
 TextSelection.propTypes = {
   text: PropTypes.string.isRequired,
-  tokenSelecteds: PropTypes.arrayOf(PropTypes.number),
+  tokenSelecteds: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func
 }
 

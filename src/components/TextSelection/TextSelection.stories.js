@@ -18,7 +18,9 @@ Apollo 13 has been dramatized, most notably in the 1995 film Apollo 13.`
 
 
 const store = new Store({
-  tokenSelecteds: [15, 16, 27, 28]
+  tokenSelecteds: [
+    { value: 'was', index: 6, tag: 'BANDYER' }
+  ]
 })
 
 storiesOf('TextSelection', module)

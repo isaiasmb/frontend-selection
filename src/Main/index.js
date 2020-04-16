@@ -21,11 +21,15 @@ const App = () => {
       <S.MainTitle>
         Bandyer Frontend selection home assignment
         <S.MainSubtitle>
-          Task 2
+          Task 3
         </S.MainSubtitle>
       </S.MainTitle>
       <S.MainDescription>
-        The user must be able to select multiple selected tokens of the text document and persist the selections to the server. A token can be deselected.
+        The user must be able to select multiple selected tokens of the text document and persist the selections to the server. 
+        A token can be deselected. 
+        When the user selects a word that starts with a vowel it gets associated the tag 'BANDYER_VOWEL'. 
+        All other tokens get associated with the tag 'BANDYER'. 
+        Display them differently in the UI.
       </S.MainDescription>
       <S.Main>
         <TextSelection

@@ -4,6 +4,12 @@ import * as utils from './utils'
 const text = 'Apollo 13 was the seventh crewed mission in the Apollo space.'
 const tokens = ['Apollo', '13', 'was', 'the', 'seventh', 'crewed', 'mission', 'in', 'the', 'Apollo', 'space', '.']
 
+const tokensSelecteds = [
+  { value: 'the', index: 3, tag: 'BANDYER' },
+  { value: 'seventh', index: 4, tag: 'BANDYER' },
+  { value: 'crewed', index: 5, tag: 'BANDYER' }
+]
+
 describe('TextSelection utils', () => {
   describe('getTokens', () => {
     it('getTokens should be a function', () => {
@@ -89,29 +95,31 @@ describe('TextSelection utils', () => {
       expect(error.message).to.be.equal('The first parameter must be a string')
     })
 
-    it('getTokenSelecteds(5, 10, tokens, []) should return [5, 6, 7, 8, 9, 10]', () => {
-      const selectedTokens = utils.getTokenSelecteds(5, 10, tokens, [])
-      expect(selectedTokens).to.be.deep.equal([5, 6, 7, 8, 9, 10])
+    it('getTokenSelecteds(3, 5, tokens, []) should return tokensSelecteds', () => {
+      const selectedTokens = utils.getTokenSelecteds(3, 5, tokens, [])
+      expect(selectedTokens).to.be.deep.equal(tokensSelecteds)
     })
 
-    it('getTokenSelecteds(10, 5, tokens, []) should return [5, 6, 7, 8, 9, 10]', () => {
-      const selectedTokens = utils.getTokenSelecteds(10, 5, tokens, [])
-      expect(selectedTokens).to.be.deep.equal([5, 6, 7, 8, 9, 10])
+    it('getTokenSelecteds(5, 3, tokens, selectedBefore) should return allTokens', () => {
+      const selectedBefore = { value: 'mission', index: 6, tag: 'BANDYER' }
+      const allTokens = tokensSelecteds.concat(selectedBefore)
+      const selectedTokens = utils.getTokenSelecteds(5, 3, tokens, [selectedBefore])
+      expect(selectedTokens).to.be.deep.equal(allTokens)
     })
 
-    it('getTokenSelecteds(10, 5, tokens, [11]) should return [5, 6, 7, 8, 9, 10, 11]', () => {
-      const selectedTokens = utils.getTokenSelecteds(10, 5, tokens, [11])
-      expect(selectedTokens).to.be.deep.equal([5, 6, 7, 8, 9, 10, 11])
-    })
-
-    it('getTokenSelecteds(5, 5, tokens, []) should return [5]', () => {
+    it('getTokenSelecteds(5, 5, tokens, []) should return [{ value: "crewed", index: 5, tag: "BANDYER" }]', () => {
       const selectedTokens = utils.getTokenSelecteds(5, 5, tokens, [])
-      expect(selectedTokens).to.be.deep.equal([5])
+      expect(selectedTokens).to.be.deep.equal([{ value: 'crewed', index: 5, tag: 'BANDYER' }])
     })
 
-    it('getTokenSelecteds(3, 7, tokens, [3, 4, 5, 6, 7, 8, 9]) should return [8, 9]', () => {
-      const selectedTokens = utils.getTokenSelecteds(3, 7, tokens, [3, 4, 5, 6, 7, 8, 9])
-      expect(selectedTokens).to.be.deep.equal([8, 9])
+    it('getTokenSelecteds(3, 7, tokens, selectedsBefore) should return allTokens', () => {
+      const selectedsBefore = [
+        { value: 'mission', index: 6, tag: 'BANDYER' },
+        { value: 'in', index: 7, tag: 'BANDYER_VOWEL' }
+      ]
+      const allTokens = tokensSelecteds.concat(selectedsBefore)
+      const selectedTokens = utils.getTokenSelecteds(3, 7, tokens, selectedsBefore)
+      expect(selectedTokens).to.be.deep.equal(allTokens)
     })
   })
 })
